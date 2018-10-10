@@ -6,7 +6,9 @@ def call(Map map) {
   def cc = map.cc ? map.cc : ''
 
   try {
+	  cleanWs()
     node('master') {
+	    post
 	    cleanWs()
 	    stage ('first') {
 	    sh 'pwd;ls'
