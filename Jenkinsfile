@@ -7,6 +7,9 @@ def call(Map map) {
 
   try {
     node('master') {
+	    stage ('first') {
+	    sh 'pwd;ls'
+	    }
 	
       if (currentBuild.result == null) {
         currentBuild.result = 'SUCCESS'
