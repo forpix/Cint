@@ -177,9 +177,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
     def shortCommitHash = getShortCommitHash()
     def changeAuthorName = getChangeAuthorName()
     def changeAuthorEmail = getChangeAuthorEmail()
-    def changeSet = getChangeSet()
-    def changeLog = getChangeLog()
-
+    
     // Default values
     def colorName = 'RED'
     def colorCode = '#FF0000'
@@ -191,8 +189,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
             "Branch Name: " + branchName + " \n " +
             "Change Author: " + changeAuthorName + " \n " +
             "Change Author Email: " + changeAuthorEmail + " \n " +
-            "Change Set: " + changeSet
-
+           
     if (buildStatus == 'STARTED') {
         color = 'YELLOW'
         colorCode = '#FFFF00'
