@@ -41,6 +41,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
+		    checkout scm 
                 echo 'Checkout Repo'
                 git branch: "${params.SPECIFIER}", url: "${GIT_URL}"
             }
