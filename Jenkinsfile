@@ -2,27 +2,13 @@
 
 pipeline {
 
-    agent {
-        docker {
-            image 'jenkinsslave:latest'
-            registryUrl 'http://8598567586.dkr.ecr.us-west-2.amazonaws.com'
-            registryCredentialsId 'ecr:us-east-1:3435443545-5546566-567765-3225'
-            args '-v /home/centos/.ivy2:/home/jenkins/.ivy2:rw -v jenkins_opt:/usr/local/bin/opt -v jenkins_apijenkins:/home/jenkins/config -v jenkins_logs:/var/logs -v jenkins_awsconfig:/home/jenkins/.aws --privileged=true -u jenkins:jenkins'
-        }
-    }
+    agent any
+        
     environment {
         APP_NAME = 'jenkins-pipeline-demo-api'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
         IMAGE_VERSION="v_${BUILD_NUMBER}"
-        GIT_URL="git@github.yourdomain.com:mpatel/${APP_NAME}.git"
-        GIT_CRED_ID='izleka2IGSTDK+MiYOG3b3lZU9nYxhiJOrxhlaJ1gAA='
-        REPOURL = 'cL5nSDa+49M.dkr.ecr.us-east-1.amazonaws.com'
-        SBT_OPTS='-Xmx1024m -Xms512m'
-        JAVA_OPTS='-Xmx1024m -Xms512m'
-        WS_PRODUCT_TOKEN='FJbep9fKLeJa/Cwh7IJbL0lPfdYg7q4zxvALAxWPLnc='
-        WS_PROJECT_TOKEN='zwzxtyeBntxX4ixHD1iE2dOr4DVFHPp7D0Czn84DEF4='
-        HIPCHAT_TOKEN = 'SpVaURsSTcWaHKulZ6L4L+sjKxhGXCkjSbcqzL42ziU='
-        HIPCHAT_ROOM = 'NotificationRoomName'
+        GIT_URL="https://github.com/forpix/Cint.git"
     }
 
     options {
@@ -49,7 +35,7 @@ pipeline {
                     echo "Deploy to QA? :: ${params.DEPLOY_QA}"
                     echo "Deploy to UAT? :: ${params.DEPLOY_UAT}"
                     echo "Deploy to PROD? :: ${params.DEPLOY_PROD}"
-                    sh 'rm -rf target/universal/*.zip'
+                
                 }
             }
         }
@@ -62,65 +48,29 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Run coverage and CLEAN UP Before please'
-                sh './sbt -Dsbt.global.base=.sbt -Dsbt.ivy.home=/home/jenkins/.ivy2 -Divy.home=/home/jenkins/.ivy2 compile coverage test coverageReport coverageOff dist'
+               
             }
         }
         stage('Publish Reports') {
             steps {
-                 echo 'Publish Junit Report'
-                 junit allowEmptyResults: true, testResults: 'target/test-reports/*.xml'
-
-                step([$class: 'FindBugsPublisher', canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: 'target/scala-2.11/findbugs/report.xml', unHealthy: ''])
-
-                 echo 'Publish Junit HTML Report'
-                 publishHTML target: [
-                     allowMissing: true,
-                     alwaysLinkToLastBuild: false,
-                     keepAll: true,
-                     reportDir: 'target/reports/html',
-                     reportFiles: 'index.html',
-                     reportName: 'Test Suite HTML Report'
-                 ]
-
-                 echo 'Publish Coverage HTML Report'
-                 publishHTML target: [
-                     allowMissing: true,
-                     alwaysLinkToLastBuild: false,
-                     keepAll: true,
-                     reportDir: 'target/scala-2.11/scoverage-report',
-                     reportFiles: 'index.html',
-                     reportName: 'Code Coverage'
-                 ]
-
-                whitesource jobApiToken: '', jobCheckPolicies: 'global', jobForceUpdate: 'global', libExcludes: '', libIncludes: '', product: "${env.WS_PRODUCT_TOKEN}", productVersion: '', projectToken: "${env.WS_PROJECT_TOKEN}", requesterEmail: ''
+                 sh 'ls -a'
             }
         }
         stage('SonarQube analysis') {
             steps {
-                sh "/usr/bin/sonar-scanner"
+              sh 'ls -a'
             }
         }
         stage('ArchiveArtifact') {
             steps {
                 echo 'Archive Artifact'
-                archiveArtifacts '**/target/universal/*.zip'
+                
             }
         }
 
          stage('Docker Tag & Push') {
              steps {
-                 script {
-                     branchName = getCurrentBranch()
-                     shortCommitHash = getShortCommitHash()
-                     IMAGE_VERSION = "${BUILD_NUMBER}-" + branchName + "-" + shortCommitHash
-                     sh 'eval $(aws ecr get-login --no-include-email --region us-east-1)'
-                     sh "docker-compose build"
-                     sh "docker tag ${REPOURL}/${APP_NAME}:latest ${REPOURL}/${APP_NAME}:${IMAGE_VERSION}"
-                     sh "docker push ${REPOURL}/${APP_NAME}:${IMAGE_VERSION}"
-                     sh "docker push ${REPOURL}/${APP_NAME}:latest"
-
-                     sh "docker rmi ${REPOURL}/${APP_NAME}:${IMAGE_VERSION} ${REPOURL}/${APP_NAME}:latest"
-                 }
+              sh 'ls -a'
              }
          }
 
