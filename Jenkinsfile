@@ -42,7 +42,7 @@ pipeline {
         stage('Checkout') {
             steps {
 		    checkout scm 
-                echo 'Checkout Repo'
+                sh 'git init;git remote add origin https://github.com/forpix/Cint.git;git pull origin master'
                 git branch: "${params.SPECIFIER}", url: "${GIT_URL}"
             }
         }
