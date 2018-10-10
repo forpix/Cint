@@ -158,10 +158,6 @@ def getChangeAuthorEmail() {
     return sh(returnStdout: true, script: "git show -s --pretty=%ae").trim()
 }
 
-def getChangeSet() {
-    return sh(returnStdout: true, script: 'git diff-tree --no-commit-id --name-status -r HEAD').trim()
-}
-
 def getCurrentBranch () {
     return sh (
             script: 'git rev-parse --abbrev-ref HEAD',
