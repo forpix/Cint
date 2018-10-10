@@ -7,6 +7,7 @@ def call(Map map) {
 
   try {
     node('master') {
+	    cleanWs()
 	    stage ('first') {
 	    sh 'pwd;ls'
 	    }
