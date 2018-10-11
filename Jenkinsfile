@@ -190,18 +190,5 @@ def notifyBuild(String buildStatus = 'STARTED') {
             "Change Author: " + changeAuthorName + " \n " +
             "Change Author Email: " + changeAuthorEmail + " \n " +
            
-    if (buildStatus == 'STARTED') {
-        color = 'YELLOW'
-        colorCode = '#FFFF00'
-    } else if (buildStatus == 'SUCCESS') {
-        color = 'GREEN'
-        colorCode = '#00FF00'
-    } else {
-        color = 'RED'
-        colorCode = '#FF0000'
-    }
-
-    if (buildStatus == 'FAILURE') {
-        emailext attachLog: true, body: summary, compressLog: true, recipientProviders: [brokenTestsSuspects(), brokenBuildSuspects(), culprits()], replyTo: 'noreply@yourdomain.com', subject: subject, to: 'mpatel@yourdomain.com'
-    }
+  
 }
