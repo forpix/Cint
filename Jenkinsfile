@@ -190,5 +190,4 @@ def notifyBuild(String buildStatus = 'STARTED') {
             "Change Author: " + changeAuthorName + " \n " +
             "Change Author Email: " + changeAuthorEmail + " \n " +
            
-  
-}
+ 
